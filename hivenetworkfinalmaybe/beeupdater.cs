@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using System;
 using GameNetcodeStuff;
 
@@ -14,9 +14,9 @@ namespace hivebombnetcode
         [HarmonyPrefix]
         public static void beehiveexplode(GrabbableObject __instance)
         {
-            if (__instance.IsHost || __instance.IsServer)
+            if (GameNetworkManager.Instance.localPlayerController.isHostPlayerObject)
             {
-                if (Config.Instance.Enabled.Value == false)
+                if (Config.Instance.Enabled.Value == true)
                 {
 
                     if (__instance.name == "RedLocustHive(Clone)")
@@ -28,7 +28,7 @@ namespace hivebombnetcode
                             Framecount = 10;
                             if ((getrandom.Next(800) <= getrandom.Next(10)))
                             {
-                                HiveMindManager.ExplodeAtClientRpc(__instance.transform, getrandom.Next(50), Config.Instance.KnockbackEnabled.Value, Config.Instance.VisibleExplosions.Value, Config.Instance.MaxPlayerDamage.Value, Config.Instance.Radius.Value);
+                                HiveMindManager.ExplodeAtServerRpc(__instance.transform, getrandom.Next(50), Config.Instance.KnockbackEnabled.Value, Config.Instance.VisibleExplosions.Value, Config.Instance.MaxPlayerDamage.Value, Config.Instance.Radius.Value);
                             }
                         }
                         else if (Framecount > 0)
@@ -37,10 +37,6 @@ namespace hivebombnetcode
                         }
                     }
                 }
-            }
-            else
-            {
-                HiveMindManager.ExplodeAtServerRpc(__instance.transform, getrandom.Next(50), Config.Instance.KnockbackEnabled.Value, Config.Instance.VisibleExplosions.Value, Config.Instance.MaxPlayerDamage.Value, Config.Instance.Radius.Value);
             }
         }
     }
